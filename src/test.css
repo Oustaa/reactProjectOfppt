@@ -1,0 +1,19 @@
+* {
+    color: inherit !important;
+    position: relative;
+}
+
+input:auto-fill {
+    outline: 5px solid rgb(0 0 0 / 0.5);
+    grid-template-columns: repeat(2, 1fr);
+    position: sticky;
+}
+
+@keyframes showMessage {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(0%);
+    }
+}
