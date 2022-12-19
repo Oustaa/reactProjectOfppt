@@ -1,7 +1,7 @@
 import style from "styled-components";
 
 const SmallContainer = style.div`
- width: calc(100% - 2rem);
+  width: calc(100% - 2rem);
   max-width:800px;
   margin: 2rem auto;
   background-color:#fff;
@@ -9,7 +9,7 @@ const SmallContainer = style.div`
   text-align:center; 
   border-radius:.25rem;
   padding:1rem;
-  
+  overflow: hidden;
 `;
 
 export default SmallContainer;

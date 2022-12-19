@@ -24,6 +24,7 @@ export const deleteProduct = createAsyncThunk(
     "products/deleteProduct",
     async(id) => {
         await axios.delete(`${Base_Url}/${id}`);
+
         return id;
     }
 );

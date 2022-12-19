@@ -1,24 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Header from "./Header";
-
-// import { MessageModal } from "../StyledComponnents/MessageModal";
+import { useSelector } from "react-redux";
+import MessageModal from "./MessageModal";
 
 const Layout = () => {
-  // const [show, setShow] = useState(false);
+  const { error } = useSelector((state) => state.products);
+  const [show, setShow] = useState(!error);
 
-  // const toggleMessage = () => {
-  //   setShow((prev) => !prev);
-  // };
+  useEffect(() => {
+    setShow(!error);
+    if (error === false) setShow(true);
+  }, [error]);
 
   return (
     <>
+      <MessageModal
+        show={show}
+        status={"loading"}
+        message={"Network Error"}
+        setShow={setShow}
+      />
       <Header />
       <main>
         <Outlet />
       </main>
-      {/* <button onClick={toggleMessage}>Toggle</button> */}
-      {/* <MessageModal className={show ? "hide" : "show"} /> */}
     </>
   );
 };

@@ -60,9 +60,8 @@ const FormControll = style.div`
 
 const AddProductForm = () => {
   const { id } = useParams();
-  const { products } = useSelector((state) => state.products);
 
-  const [status, setStatus] = useState("idel");
+  const { products, type } = useSelector((state) => state.products);
 
   const idInputRef = useRef();
 
@@ -73,10 +72,12 @@ const AddProductForm = () => {
     Price: "",
     ProId: "",
   });
+
   const [inputsValueValidation, setInputValueValidation] = useState({
     label: { validation: true, gotFocus: false },
     Price: { validation: true, gotFocus: false },
   });
+
   const canAdd = inputsValue?.label !== "" && inputsValue?.Price !== "";
 
   const inputChangeHandler = (e) => {
@@ -92,25 +93,13 @@ const AddProductForm = () => {
     });
   };
 
-  const formSubmetHandler = async (e) => {
+  const formSubmetHandler = (e) => {
     e.preventDefault();
     if (!canAdd) return;
     if (!id) {
-      try {
-        setStatus("adding");
-        await dispatch(addNewProduct(inputsValue));
-        setStatus("success");
-      } catch (error) {
-        setStatus("error");
-      }
+      dispatch(addNewProduct(inputsValue));
     } else {
-      try {
-        setStatus("updating");
-        await dispatch(upDateProduct(inputsValue));
-        setStatus("success");
-      } catch (error) {
-        setStatus("error");
-      }
+      dispatch(upDateProduct(inputsValue));
     }
   };
 
@@ -141,11 +130,15 @@ const AddProductForm = () => {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:1500/api/products/${id}/exists`)
-      .then((data) => data.json())
-      .then((data) => {
-        if (data.length === 0) navigate("/");
-      });
+    if (id !== undefined)
+      fetch(`http://localhost:1500/api/products/${id}/exists`)
+        .then((data) => data.json())
+        .then((data) => {
+          if (data.length === 0) navigate("/");
+        })
+        .catch((error) => {
+          navigate("/");
+        });
   }, [id, navigate]);
 
   useEffect(() => {
@@ -165,9 +158,9 @@ const AddProductForm = () => {
     }
   }, [id, products]);
 
-  useEffect(() => {
-    if (status === "success") navigate("/");
-  }, [status, navigate]);
+  // useEffect(() => {
+  //   if (status === "success") navigate("/");
+  // }, [status, navigate]);
 
   return (
     <SmallContainer>
@@ -230,10 +223,10 @@ const AddProductForm = () => {
           type="submit"
         >
           {id
-            ? status === "updating"
+            ? type === "updating"
               ? "Saving..."
               : "Save Changes"
-            : status === "adding"
+            : type === "Adding"
             ? "Adding..."
             : "Add Product"}
         </Button>

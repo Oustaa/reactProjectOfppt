@@ -6,7 +6,7 @@
 input:auto-fill {
     outline: 5px solid rgb(0 0 0 / 0.5);
     grid-template-columns: repeat(2, 1fr);
-    position: sticky;
+    position: absolute;
 }
 
 @keyframes showMessage {

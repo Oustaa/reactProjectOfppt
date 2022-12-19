@@ -1,0 +1,15 @@
+.appear {
+    opacity: 0;
+    transform: translateX(-10%);
+}
+
+.appear-active {
+    opacity: 1;
+    transform: translateX(0%);
+    transition: all 300ms ease-in;
+}
+
+.appear-done {
+    opacity: 1;
+    transform: translateX(0%);
+}

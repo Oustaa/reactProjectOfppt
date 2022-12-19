@@ -1,8 +1,6 @@
-import React from "react";
-import style from "styled-components";
-
 import { NavLink } from "react-router-dom";
 
+import style from "styled-components";
 import Container from "../StyledComponnents/Container";
 
 const StyledHeader = style.header`
@@ -12,20 +10,24 @@ const StyledHeader = style.header`
 
   position:sticky;
   top:0;
+  z-index:24;
 
   .logo{
-   font-weight:500;
-   font-size:1.50rem;
-   color:#f33;
+    font-weight:500;
+    font-size:1.50rem;
+    color:#f33;
   }
 
   nav ul {
-   display: flex;
-   gap: 1rem
+    display: flex;
+    gap: 1rem
   }
+
   a{
     padding:.25rem;
   }
+  
+  a.active,
   a:hover,
   a:focus{
     background-color:#333;
@@ -41,6 +43,7 @@ const extraSltyls = `
 `;
 
 const Header = () => {
+  const handelActiveLink = ({ isActive }) => (isActive ? "active" : "");
   return (
     <StyledHeader>
       <Container extraSltyls={extraSltyls}>
@@ -48,10 +51,14 @@ const Header = () => {
         <nav>
           <ul>
             <li>
-              <NavLink to="/">Home</NavLink>
+              <NavLink className={handelActiveLink} to="/">
+                Home
+              </NavLink>
             </li>
             <li>
-              <NavLink to="/add_product">Add Product</NavLink>
+              <NavLink className={handelActiveLink} to="/add_product">
+                Add Product
+              </NavLink>
             </li>
           </ul>
         </nav>

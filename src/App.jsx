@@ -4,6 +4,7 @@ import Layout from "./componnents/Layout";
 
 import AddProductForm from "./features/Products/AddProductForm";
 import ErrorPage from "./pages/ErrorPage";
+import MessageModal from "./componnents/MessageModal";
 const Products = lazy(() => import("./features/Products/Products"));
 
 const App = () => {

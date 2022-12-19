@@ -15,7 +15,7 @@ export const Button = style.button`
 
   &:hover{
   background-color:${({ bgColor }) => {
-    const updatedDta = { ...bgColor, l: bgColor.l - 5 };
+    const updatedDta = { ...bgColor, l: bgColor?.l - 5 };
     return updatedDta
       ? Object.keys(updatedDta).reduce(
           (prev, next, i) =>
