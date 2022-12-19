@@ -45,8 +45,9 @@ const productsSlice = createSlice({
     initialState: {
         products: [],
         status: "idle",
-        type: null,
         error: null,
+        type: null,
+        errorMessage: "",
     },
     reducers: {
         orderProcuctsByPriceAsc(state) {
@@ -60,22 +61,22 @@ const productsSlice = createSlice({
         builder
             .addCase(getProducts.pending, (state) => {
                 state.status = "loading";
-                state.type = "fetching";
+                state.error = null;
             })
             .addCase(getProducts.fulfilled, (state, action) => {
                 state.status = "success";
-                state.type = null;
                 state.products = [...action.payload];
             })
             .addCase(getProducts.rejected, (state, action) => {
                 state.status = "rejected";
-                state.type = null;
                 state.error = action.error.message;
+                state.errorMessage = "Can't fetch data retry later please!";
             });
         builder
             .addCase(upDateProduct.pending, (state) => {
                 state.status = "loading";
                 state.type = "updating";
+                state.error = null;
             })
             .addCase(upDateProduct.fulfilled, (state, action) => {
                 state.status = "success";
@@ -89,6 +90,7 @@ const productsSlice = createSlice({
                 state.status = "rejected";
                 state.type = null;
                 state.error = action.error.message;
+                state.errorMessage = "Can't update product retry later please!";
             });
         builder.addCase(deleteProduct.fulfilled, (state, action) => {
             const uptadetProducts = state.products.filter(
@@ -102,6 +104,7 @@ const productsSlice = createSlice({
             .addCase(addNewProduct.pending, (state) => {
                 state.status = "loading";
                 state.type = "Adding";
+                state.error = null;
             })
             .addCase(addNewProduct.fulfilled, (state, action) => {
                 state.status = "success";
@@ -112,6 +115,7 @@ const productsSlice = createSlice({
                 state.status = "rejected";
                 state.type = null;
                 state.error = action.error.message;
+                state.errorMessage = "Can't update product retry later please!";
             });
     },
 });

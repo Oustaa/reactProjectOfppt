@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import MessageModal from "./MessageModal";
 
 const Layout = () => {
-  const { error } = useSelector((state) => state.products);
+  const { error, errorMessage } = useSelector((state) => state.products);
   const [show, setShow] = useState(!error);
 
   useEffect(() => {
@@ -19,6 +19,7 @@ const Layout = () => {
         show={show}
         status={"loading"}
         message={"Network Error"}
+        errorMessage={errorMessage}
         setShow={setShow}
       />
       <Header />

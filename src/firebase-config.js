@@ -13,7 +13,7 @@ const firebaseConfig = {
     storageBucket: "reactprojectofppt.appspot.com",
     messagingSenderId: "756072098981",
     appId: "1:756072098981:web:454f96cb2942e6cb99314c",
-    measurementId: "G-3TPWBTNGJ7"
+    measurementId: "G-3TPWBTNGJ7",
 };
 
 // Initialize Firebase

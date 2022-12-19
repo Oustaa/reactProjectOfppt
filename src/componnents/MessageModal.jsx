@@ -5,7 +5,7 @@ import styles from "styled-components";
 
 import { BsXCircleFill } from "react-icons/bs";
 
-const DURATION = "5000";
+const DURATION = 5000;
 
 const StyledMessageModal = styles.div`
   position: fixed;
@@ -16,24 +16,24 @@ const StyledMessageModal = styles.div`
   overflow: hidden;
   z-index:25;
   box-shadow:4px 5px 10px 0px rgb(0 0 0 / 50%);;
-  &.modal-enter-active {
+  &.modal-exit-active {
     transform:scale(.8);
-    transition:transform 200ms ease-in ${+DURATION - 200}ms;
+    transition:transform 200ms ease-in ${DURATION - 200}ms;
   }
   // Animating Procress bar
-  &.modal-enter .outer {
+  &.modal-exit .outer {
     .inner{
       width:100%;
-      transition:width ${+DURATION - 200}ms ease-in ;
+      transition:width ${DURATION - 200}ms ease-in ;
     }
   }
-  &.modal-enter-active .outer {
+  &.modal-exit-active .outer {
     .inner{
       width:0%;
-      transition:width ${+DURATION - 200}ms ease-in;
+      transition:width ${DURATION - 200}ms ease-in;
     }
   }
-  &.modal-enter-done .outer{
+  &.modal-exit-done .outer{
     .inner{
       width:0%;
     }
@@ -65,15 +65,24 @@ const StyledMessageModal = styles.div`
   }
   `;
 
-const MessageModal = ({ message, show, setShow }) => {
+const MessageModal = ({ message, show, setShow, errorMessage }) => {
   return (
-    <CSSTransition in={!show} timeout={+DURATION} classNames="modal">
+    <CSSTransition
+      in={!show}
+      timeout={DURATION}
+      classNames="modal"
+      unmountOnExit
+      mountOnEnter
+      onEnter={() => setShow((prev) => !prev)}
+    >
       <StyledMessageModal>
         <div className="header">
           <div className="icon">
             <BsXCircleFill />
           </div>
-          <p className="text">{message}</p>
+          <p className="text">
+            {message}: {errorMessage}
+          </p>
         </div>
         <div className="outer">
           <div className="inner"></div>
