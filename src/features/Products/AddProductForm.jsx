@@ -63,6 +63,8 @@ const AddProductForm = () => {
 
   const { products, type } = useSelector((state) => state.products);
 
+  const [status, setStatus] = useState("idle");
+
   const idInputRef = useRef();
 
   const navigate = useNavigate();
@@ -80,6 +82,7 @@ const AddProductForm = () => {
 
   const canAdd = inputsValue?.label !== "" && inputsValue?.Price !== "";
 
+  // handling input changes
   const inputChangeHandler = (e) => {
     setInputValue((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
@@ -97,12 +100,23 @@ const AddProductForm = () => {
     e.preventDefault();
     if (!canAdd) return;
     if (!id) {
-      dispatch(addNewProduct(inputsValue));
+      try {
+        dispatch(addNewProduct(inputsValue));
+        setStatus("success");
+      } catch (error) {
+        setStatus("rejected");
+      }
     } else {
-      dispatch(upDateProduct(inputsValue));
+      try {
+        dispatch(upDateProduct(inputsValue));
+        setStatus("success");
+      } catch (error) {
+        setStatus("rejected");
+      }
     }
   };
 
+  // validating an input after it lose focus
   const inputBlurHandler = (e) => {
     if (e.target.name !== "ProId" && e.target.value === "") {
       setInputValueValidation((prev) => {
@@ -118,6 +132,7 @@ const AddProductForm = () => {
     }
   };
 
+  // setting a focused input to be focus
   const inputFocusHandler = (e) => {
     const name = e.target.name;
     if (name === "ProId") return;
@@ -129,6 +144,7 @@ const AddProductForm = () => {
     });
   };
 
+  // testing if a product exists or not if not rederect to home page
   useEffect(() => {
     if (id !== undefined)
       fetch(`http://localhost:1500/api/products/${id}/exists`)
@@ -141,6 +157,7 @@ const AddProductForm = () => {
         });
   }, [id, navigate]);
 
+  // setting inputs value if we want to update
   useEffect(() => {
     setInputValue({
       label: "",
@@ -158,9 +175,10 @@ const AddProductForm = () => {
     }
   }, [id, products]);
 
-  // useEffect(() => {
-  //   if (status === "success") navigate("/");
-  // }, [status, navigate]);
+  // rederect to home page if updating or adding was success
+  useEffect(() => {
+    if (status === "success") navigate("/");
+  }, [status, navigate]);
 
   return (
     <SmallContainer>
