@@ -18,19 +18,19 @@ const StyledMessageModal = styles.div`
   box-shadow:4px 5px 10px 0px rgb(0 0 0 / 50%);;
   &.modal-exit-active {
     transform:scale(.8);
-    transition:transform 200ms ease-in ${DURATION - 200}ms;
+    transition:transform 200ms ease-in-out ${DURATION - 200}ms;
   }
   // Animating Procress bar
   &.modal-exit .outer {
     .inner{
       width:100%;
-      transition:width ${DURATION - 200}ms ease-in ;
+      transition:width ${DURATION - 200}ms ease-in-out ;
     }
   }
   &.modal-exit-active .outer {
     .inner{
       width:0%;
-      transition:width ${DURATION - 200}ms ease-in;
+      transition:width ${DURATION - 200}ms ease-in-out;
     }
   }
   &.modal-exit-done .outer{
