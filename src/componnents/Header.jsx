@@ -47,16 +47,16 @@ const Header = () => {
   return (
     <StyledHeader>
       <Container extraSltyls={extraSltyls}>
-        <div className="logo">Projet</div>
+        <div className='logo'>Project</div>
         <nav>
           <ul>
             <li>
-              <NavLink className={handelActiveLink} to="/">
+              <NavLink className={handelActiveLink} to='/'>
                 Home
               </NavLink>
             </li>
             <li>
-              <NavLink className={handelActiveLink} to="/add_product">
+              <NavLink className={handelActiveLink} to='/add_product'>
                 Add Product
               </NavLink>
             </li>

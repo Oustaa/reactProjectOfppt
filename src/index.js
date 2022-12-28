@@ -18,9 +18,9 @@ root.render( <
     <
     Provider store = { store } >
     <
-    GlobalStyles / >
-    <
     App / >
+    <
+    GlobalStyles / >
     <
     /Provider>{" "} <
     /BrowserRouter>

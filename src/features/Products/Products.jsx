@@ -81,12 +81,12 @@ const Products = () => {
 
   return (
     <>
-      <SmallContainer>
+      <SmallContainer data-testid='products'>
         {products.length === 0 && status === "success" ? (
           <>
             <StyledMessage>No Product Found</StyledMessage>
             <Button bgColor={{ h: 0, s: 68, l: 55 }}>
-              <Link to="/add_product">Add New Product</Link>
+              <Link to='/add_product'>Add New Product</Link>
             </Button>
           </>
         ) : (
@@ -94,8 +94,8 @@ const Products = () => {
             <StyledOrderBy>
               <h2>Order By: </h2>
               <select onChange={selectChangeHandler} value={orderBy}>
-                <option value="1">Price (Asc)</option>
-                <option value="2">Price (Des)</option>
+                <option value='1'>Price (Asc)</option>
+                <option value='2'>Price (Des)</option>
               </select>
             </StyledOrderBy>
             {products.map((product) => (

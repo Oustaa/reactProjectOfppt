@@ -9,15 +9,16 @@ export const getProducts = createAsyncThunk(
         const resp = await axios.get(Base_Url);
 
         return resp.data;
-    }
+    },
 );
 
 export const upDateProduct = createAsyncThunk(
     "products/updateProduct",
     async(data) => {
         await axios.put(Base_Url, data);
+
         return data;
-    }
+    },
 );
 
 export const deleteProduct = createAsyncThunk(
@@ -26,7 +27,7 @@ export const deleteProduct = createAsyncThunk(
         await axios.delete(`${Base_Url}/${id}`);
 
         return id;
-    }
+    },
 );
 
 export const addNewProduct = createAsyncThunk(
@@ -38,7 +39,7 @@ export const addNewProduct = createAsyncThunk(
         } catch (error) {
             throw error.message;
         }
-    }
+    },
 );
 const productsSlice = createSlice({
     name: "products",
@@ -94,7 +95,7 @@ const productsSlice = createSlice({
             });
         builder.addCase(deleteProduct.fulfilled, (state, action) => {
             const uptadetProducts = state.products.filter(
-                (product) => product.ProId !== action.payload
+                (product) => product.ProId !== action.payload,
             );
             state.products = uptadetProducts;
             state.status = "success";

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { deleteProduct } from "./product-slice";
 import style from "styled-components";
@@ -58,11 +58,11 @@ const ProductItem = ({ label, Price, ProId }) => {
   return (
     <CSSTransition in={true} timeout={300} appear={true}>
       <StyledProductItem>
-        <div className="productData">
+        <div className='productData'>
           <h2>{label}</h2>
           <h3>{Price}$</h3>
         </div>
-        <div className="actions">
+        <div className='actions'>
           <button>
             <Link to={`edit_product/${ProId}`}>
               <BiPencil />

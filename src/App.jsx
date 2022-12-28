@@ -4,18 +4,17 @@ import Layout from "./componnents/Layout";
 
 import AddProductForm from "./features/Products/AddProductForm";
 import ErrorPage from "./pages/ErrorPage";
-import MessageModal from "./componnents/MessageModal";
 const Products = lazy(() => import("./features/Products/Products"));
 
 const App = () => {
   return (
     <Suspense>
       <Routes>
-        <Route path="/" element={<Layout />}>
+        <Route path='/' element={<Layout />}>
           <Route index element={<Products />} />
-          <Route path="add_product" element={<AddProductForm />} />
-          <Route path="edit_product/:id" element={<AddProductForm />} />
-          <Route path="*" element={<ErrorPage />} />
+          <Route path='add_product' element={<AddProductForm />} />
+          <Route path='edit_product/:id' element={<AddProductForm />} />
+          <Route path='*' element={<ErrorPage />} />
         </Route>
       </Routes>
     </Suspense>
