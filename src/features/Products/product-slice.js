@@ -1,21 +1,25 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const Base_Url = "http://localhost:1500/api/products";
+const Base_Url = "http://localhost:1500/api/";
 
 export const getProducts = createAsyncThunk(
     "products/fetchProducts",
     async() => {
-        const resp = await axios.get(Base_Url);
-
-        return resp.data;
+        const categories = ["pc&laptops", "smartphones"];
+        const items = {};
+        for (let category of categories) {
+            const resp = await axios.get(`${Base_Url}${category}`);
+            items[category] = resp.data;
+        }
+        return items;
     },
 );
 
 export const upDateProduct = createAsyncThunk(
     "products/updateProduct",
     async(data) => {
-        await axios.put(Base_Url, data);
+        await axios.put(`${Base_Url}${data.category}`, data);
 
         return data;
     },
@@ -23,40 +27,58 @@ export const upDateProduct = createAsyncThunk(
 
 export const deleteProduct = createAsyncThunk(
     "products/deleteProduct",
-    async(id) => {
-        await axios.delete(`${Base_Url}/${id}`);
+    async({ id, category }) => {
+        await axios.delete(`${Base_Url}${category}/${id}`);
 
-        return id;
+        return { id, category };
     },
 );
 
 export const addNewProduct = createAsyncThunk(
     "products/addNewProduct",
     async(data) => {
+        let insertedDate;
+        if (data.category === "pc&laptops")
+            insertedDate = {
+                ...data,
+                ram: +data.ram,
+                price: +data.price,
+                "keyboard&mouse": +data["keyboard&mouse"],
+            };
+        else
+            insertedDate = {
+                ...data,
+                ram: +data.ram,
+                price: +data.price,
+                screensize: +data.screensize,
+                voiceAssistant: +data["voiceAssistant"],
+                memory: +data.memory,
+            };
         try {
-            await axios.post(Base_Url, data);
+            await axios.post(`${Base_Url}${data.category}`, insertedDate);
             return data;
         } catch (error) {
             throw error.message;
         }
     },
 );
+
 const productsSlice = createSlice({
     name: "products",
     initialState: {
-        products: [],
+        products: {},
         status: "idle",
         error: null,
         type: null,
         errorMessage: "",
     },
     reducers: {
-        orderProcuctsByPriceAsc(state) {
-            state.products = state.products.sort((a, b) => a.Price - b.Price);
-        },
-        orderProcuctsByPriceDes(state) {
-            state.products = state.products.sort((a, b) => b.Price - a.Price);
-        },
+        // orderProcuctsByPriceAsc(state) {
+        //     state.products = state.products.sort((a, b) => a.Price - b.Price);
+        // },
+        // orderProcuctsByPriceDes(state) {
+        //     state.products = state.products.sort((a, b) => b.Price - a.Price);
+        // },
     },
     extraReducers(builder) {
         builder
@@ -66,7 +88,7 @@ const productsSlice = createSlice({
             })
             .addCase(getProducts.fulfilled, (state, action) => {
                 state.status = "success";
-                state.products = [...action.payload];
+                state.products = action.payload;
             })
             .addCase(getProducts.rejected, (state, action) => {
                 state.status = "rejected";
@@ -79,13 +101,15 @@ const productsSlice = createSlice({
                 state.type = "updating";
                 state.error = null;
             })
-            .addCase(upDateProduct.fulfilled, (state, action) => {
+            .addCase(upDateProduct.fulfilled, (state, { payload }) => {
                 state.status = "success";
                 state.type = null;
-                state.products = state.products.map((product) => {
-                    if (product.ProId === +action.payload.ProId) return action.payload;
-                    return product;
-                });
+                state.products[payload.category] = state.products[payload.category].map(
+                    (product) => {
+                        if (product.ProId === +payload.id) return payload;
+                        return product;
+                    },
+                );
             })
             .addCase(upDateProduct.rejected, (state, action) => {
                 state.status = "rejected";
@@ -93,11 +117,11 @@ const productsSlice = createSlice({
                 state.error = action.error.message;
                 state.errorMessage = "Can't update product retry later please!";
             });
-        builder.addCase(deleteProduct.fulfilled, (state, action) => {
-            const uptadetProducts = state.products.filter(
-                (product) => product.ProId !== action.payload,
-            );
-            state.products = uptadetProducts;
+        builder.addCase(deleteProduct.fulfilled, (state, { payload }) => {
+            state.products[payload.category] = state.products[
+                payload.category
+            ].filter((product) => product.id !== payload.id);
+
             state.status = "success";
             state.type = null;
         });
@@ -107,16 +131,16 @@ const productsSlice = createSlice({
                 state.type = "Adding";
                 state.error = null;
             })
-            .addCase(addNewProduct.fulfilled, (state, action) => {
+            .addCase(addNewProduct.fulfilled, (state, { payload }) => {
                 state.status = "success";
                 state.type = null;
-                state.products = [...state.products, action.payload];
+                state.products[payload.category].push(payload);
             })
             .addCase(addNewProduct.rejected, (state, action) => {
                 state.status = "rejected";
                 state.type = null;
                 state.error = action.error.message;
-                state.errorMessage = "Can't update product retry later please!";
+                state.errorMessage = "Can't Add product, retry later please!";
             });
     },
 });

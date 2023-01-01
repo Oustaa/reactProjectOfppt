@@ -7,6 +7,9 @@ input:auto-fill {
     outline: 5px solid rgb(0 0 0 / 0.5);
     grid-template-columns: repeat(2, 1fr);
     position: absolute;
+    text-transform: uppercase;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
 }
 
 @keyframes showMessage {

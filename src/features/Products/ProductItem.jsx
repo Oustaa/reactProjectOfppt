@@ -28,7 +28,9 @@ const StyledProductItem = style.div`
     cursor:pointer;
     transform:scale(1.01)
   }
-
+  .Link:hover{
+    transform:scale(1.05)
+  }
   .productData{
     display:flex;
     align-items:center;
@@ -51,20 +53,23 @@ const StyledProductItem = style.div`
   }
 `;
 
-const ProductItem = ({ label, Price, ProId }) => {
+const ProductItem = ({ label, price, id, category }) => {
   const dispatch = useDispatch();
-  const deleteProductHandler = () => dispatch(deleteProduct(ProId));
+  const deleteProductHandler = () => dispatch(deleteProduct({ id, category }));
 
   return (
     <CSSTransition in={true} timeout={300} appear={true}>
       <StyledProductItem>
         <div className='productData'>
           <h2>{label}</h2>
-          <h3>{Price}$</h3>
+          <h3>{price}$</h3>
+          <h3 className='Link'>
+            <Link to={`/${category}/${id}`}>More info...</Link>
+          </h3>
         </div>
         <div className='actions'>
           <button>
-            <Link to={`edit_product/${ProId}`}>
+            <Link to={`edit_product/${category}/${id}`}>
               <BiPencil />
             </Link>
           </button>

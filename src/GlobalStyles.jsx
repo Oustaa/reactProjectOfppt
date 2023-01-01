@@ -41,6 +41,10 @@ button{
 	background-color:transparent;
 	color:inherit;
 }
+button:disabled{
+ cursor: not-allowed !important;
+	opacity: 0.5;
+}
 button:hover{
 	background-color:#fff;
 	color:#333;

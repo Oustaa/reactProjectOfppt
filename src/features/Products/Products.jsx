@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import ProductItem from "./ProductItem";
-
-import {
-  orderProcuctsByPriceAsc,
-  orderProcuctsByPriceDes,
-} from "./product-slice";
+import { useSelector } from "react-redux";
 
 import style from "styled-components";
 import { Button } from "../../StyledComponnents/index";
 import SmallContainer from "../../StyledComponnents/SmallContainer";
+import ProductsGroup from "./ProductsGroup";
 
 const StyledMessage = style.h2`
   text-align: center;
@@ -46,23 +41,7 @@ const StyledOrderBy = style.div`
 `;
 
 const Products = () => {
-  const dispatch = useDispatch();
   const { products, status, error } = useSelector((state) => state.products);
-
-  const [orderBy, setOrderBy] = useState("1");
-
-  useEffect(() => {
-    if (orderBy === "1") {
-      dispatch(orderProcuctsByPriceAsc());
-    } else if (orderBy === "2") {
-      dispatch(orderProcuctsByPriceDes());
-    }
-  }, [orderBy, dispatch]);
-
-  const selectChangeHandler = (e) => {
-    console.log(e.target);
-    setOrderBy(e.target.value);
-  };
 
   if (status === "rejected") {
     return (
@@ -91,16 +70,15 @@ const Products = () => {
           </>
         ) : (
           <>
-            <StyledOrderBy>
-              <h2>Order By: </h2>
-              <select onChange={selectChangeHandler} value={orderBy}>
-                <option value='1'>Price (Asc)</option>
-                <option value='2'>Price (Des)</option>
-              </select>
-            </StyledOrderBy>
-            {products.map((product) => (
-              <ProductItem key={product.ProId} {...product} />
-            ))}
+            {Object.keys(products).map((key) => {
+              return (
+                <ProductsGroup
+                  key={key}
+                  label={key}
+                  categoyProducts={products[key]}
+                />
+              );
+            })}
           </>
         )}
       </SmallContainer>

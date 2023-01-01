@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewProduct } from "./product-slice";
+import { upDateProduct } from "./product-slice";
 
 import PcInfo from "./MoreInfo/PcInfo";
 import SmartPhonesInfo from "./MoreInfo/SmartPhonesInfo";
@@ -17,13 +17,15 @@ const StyledFormHeader = style.h1`
     font-weight:600;
 `;
 
-const AddProductForm = () => {
+const UpdateProductForm = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { id, category } = useParams();
   const { type } = useSelector((state) => state.products);
 
   const [status, setStatus] = useState("idle");
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [inputsValue, setInputValue] = useState({
     label: "",
     price: "",
@@ -51,27 +53,12 @@ const AddProductForm = () => {
       inputsValue?.screensize !== "" &&
       inputsValue?.ram !== "";
   }
+
   useEffect(() => {
-    if (inputsValue.category === "pc&laptops") {
-      setInputValue((prev) => {
-        return {
-          ...prev,
-          cpu: "",
-          gpu: "",
-          ram: "",
-        };
-      });
-    } else if (inputsValue.category === "smartphones") {
-      setInputValue((prev) => {
-        return {
-          ...prev,
-          screensize: "",
-          memory: "",
-          ram: "",
-        };
-      });
-    }
-  }, [inputsValue.category]);
+    fetch(`http://localhost:1500/api/${category}/${id}`)
+      .then((resp) => resp.json())
+      .then((data) => setInputValue(data[0]));
+  }, [category, id]);
 
   // handling input changes
   const inputChangeHandler = (e) => {
@@ -96,12 +83,13 @@ const AddProductForm = () => {
     });
   };
 
+  // Form Submit handler
   const formSubmetHandler = (e) => {
     e.preventDefault();
     if (!canAdd) return;
 
     try {
-      dispatch(addNewProduct(inputsValue));
+      dispatch(upDateProduct({ ...inputsValue, id }));
       setStatus("success");
     } catch (error) {
       setStatus("rejected");
@@ -236,11 +224,11 @@ const AddProductForm = () => {
           type='submit'
           disabled={!canAdd}
         >
-          {type === "Adding" ? "Adding..." : "Add Product"}
+          {type === "updating" ? "Updating..." : "Update Product"}
         </Button>
       </form>
     </SmallContainer>
   );
 };
 
-export default AddProductForm;
+export default UpdateProductForm;
