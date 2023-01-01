@@ -22,19 +22,25 @@ const FormControll = style.div`
   margin-top:1rem;
 
   &.invalid{
-    input{
-      border:1px solid #e40606;
-      background-color:#bf4040;;
+    input,select{
+      border:1px solid #e40606 !important;
+      background-color:#bf4040 !important;
     }
     label{
       color:#bf4040;
     }
   }
 
+  p{
+    grid-column:2/6;
+    margin-top:.25rem;
+    font-size:0.8rem;
+    color:#bf4040;
+  }
 
-  input{
-    background-color:#333;
-    color:#fff;
+  input,select{
+    background-color:#333 !important;
+    color:#fff !important;
     padding:.35rem;
     font-weight:100;
     border-radius:.25rem;
@@ -46,11 +52,6 @@ const FormControll = style.div`
     &:hover,
     &:focus-visible{
       outline:none;
-    }
-    &:read-only{
-      background-color:#ccc;
-      border-color:#ccc;
-      color:#333;
     }
     &:auto-fill {
       background-color:red;
@@ -65,19 +66,18 @@ const AddProductForm = () => {
 
   const [status, setStatus] = useState("idle");
 
-  const idInputRef = useRef();
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [inputsValue, setInputValue] = useState({
     label: "",
     Price: "",
-    ProId: "",
+    category: "",
   });
 
   const [inputsValueValidation, setInputValueValidation] = useState({
     label: { validation: true, gotFocus: false },
     Price: { validation: true, gotFocus: false },
+    category: { validation: true, gotFocus: false },
   });
 
   const canAdd = inputsValue?.label !== "" && inputsValue?.Price !== "";
@@ -164,14 +164,12 @@ const AddProductForm = () => {
       Price: "",
       ProId: "",
     });
-    idInputRef.current.readOnly = false;
 
     if (id !== undefined) {
       const productUpdated = products.find(
-        (product) => product.ProId === Number(id)
+        (product) => product.ProId === Number(id),
       );
       setInputValue(productUpdated);
-      idInputRef.current.readOnly = true;
     }
   }, [id, products]);
 
@@ -184,18 +182,7 @@ const AddProductForm = () => {
     <SmallContainer>
       <form onSubmit={formSubmetHandler}>
         <StyledFormHeader>Add New Product</StyledFormHeader>
-        <FormControll>
-          <label htmlFor="ProId">Id:</label>
-          <input
-            type="text"
-            id="ProId"
-            name="ProId"
-            ref={idInputRef}
-            value={inputsValue?.ProId}
-            onChange={inputChangeHandler}
-            onFocus={inputFocusHandler}
-          />
-        </FormControll>
+
         <FormControll
           className={
             inputsValueValidation.label.gotFocus &&
@@ -204,16 +191,19 @@ const AddProductForm = () => {
               : ""
           }
         >
-          <label htmlFor="label">Label:</label>
+          <label htmlFor='label'>Label:</label>
           <input
-            type="text"
-            id="label"
-            name="label"
+            type='text'
+            id='label'
+            name='label'
             value={inputsValue?.label}
             onChange={inputChangeHandler}
             onFocus={inputFocusHandler}
             onBlur={inputBlurHandler}
           />
+          {!inputsValueValidation.Price.validation ? (
+            <p className='error_message'>You cant enter an empty value!!</p>
+          ) : null}
         </FormControll>
         <FormControll
           className={
@@ -223,22 +213,46 @@ const AddProductForm = () => {
               : ""
           }
         >
-          <label htmlFor="Price">Price:</label>
+          <label htmlFor='Price'>Price:</label>
           <input
-            type="text"
-            id="Price"
-            name="Price"
+            type='text'
+            id='Price'
+            name='Price'
             value={inputsValue?.Price}
             onChange={inputChangeHandler}
             onFocus={inputFocusHandler}
             onBlur={inputBlurHandler}
           />
+          {!inputsValueValidation.Price.validation ? (
+            <p className='error_message'>You cant enter an empty value!!</p>
+          ) : null}
+        </FormControll>
+        <FormControll
+          className={
+            inputsValueValidation.category.gotFocus &&
+            !inputsValueValidation.category.validation
+              ? "invalid"
+              : ""
+          }
+        >
+          <label htmlFor='category'>Category:</label>
+          <select
+            type='text'
+            id='category'
+            name='category'
+            value={inputsValue?.category}
+            onChange={inputChangeHandler}
+            onFocus={inputFocusHandler}
+            onBlur={inputBlurHandler}
+          >
+            <option value=''>--Select A Catigorie--</option>
+          </select>
         </FormControll>
         <Button
           style={{ marginTop: "1rem" }}
           bgColor={{ h: 0, s: 68, l: 55 }}
-          color="#fff"
-          type="submit"
+          color='#fff'
+          type='submit'
         >
           {id
             ? type === "updating"

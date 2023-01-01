@@ -81,7 +81,7 @@ const Products = () => {
 
   return (
     <>
-      <SmallContainer data-testid='products'>
+      <SmallContainer>
         {products.length === 0 && status === "success" ? (
           <>
             <StyledMessage>No Product Found</StyledMessage>
